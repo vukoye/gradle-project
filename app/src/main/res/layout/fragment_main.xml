@@ -25,12 +25,22 @@
 
         />
     <Button
-        android:id="@+id/tellJokeNewActivity"
+        android:id="@+id/tell_joke_new_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tell_joke"
         android:onClick="tellJokeNewActivity"
         android:text="@string/button_new_actovity_text"
+
+        />
+
+    <Button
+        android:id="@+id/tell_joke_backend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tell_joke_new_activity"
+        android:onClick="tellJokeNewActivity"
+        android:text="@string/button_backend_text"
 
         />
 
