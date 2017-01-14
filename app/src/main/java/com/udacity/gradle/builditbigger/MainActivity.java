@@ -15,6 +15,7 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
+import com.vukoye.Joke;
 import com.vukoye.JokeTelling;
 import com.vukoye.jokes.backend.myApi.MyApi;
 import com.vukoye.jokeviewer.JokeViewerActivity;
@@ -67,39 +68,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJokeFromBackend(View view) {
-        new JokesBackEndAsyncTask().execute(this);
+        GetJokeAsyncTask jokeAsyncTask = new GetJokeAsyncTask();
+        jokeAsyncTask.setListener(new GetJokeAsyncTask.JokeReceivedListener() {
+            @Override
+            public void onJokeReady(Joke joke) {
+                startJokeActivity(joke.getText());
+            }
+        });
+        jokeAsyncTask.execute(this);
     }
 
-    class JokesBackEndAsyncTask extends AsyncTask<Context, Void, String> {
-        MyApi mApiService = null;
-        Context mContext;
-        @Override
-        protected String doInBackground(final Context... params) {
-            if (mApiService == null) {
-                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                        .setRootUrl("https://gradle-test-project.appspot.com/_ah/api/")
-                        .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                            @Override
-                            public void initialize(final AbstractGoogleClientRequest<?> request) throws IOException {
-                                request.setDisableGZipContent(true);
-                            }
-                        });
-
-                mApiService = builder.build();
-            }
-            mContext = params[0];
-            try {
-                return mApiService.getJoke().execute().getText();
-            } catch (IOException e) {
-                return e.getMessage();
-            }
-        }
-
-        @Override
-        protected void onPostExecute(final String joke) {
-            startJokeActivity(joke);
-        }
-    }
 
     private void startJokeActivity(String joke) {
         Intent intent = new Intent(this, JokeViewerActivity.class);
