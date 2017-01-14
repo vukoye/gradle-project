@@ -9,6 +9,8 @@ package com.vukoye.jokes.backend;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
+import com.vukoye.Joke;
+import com.vukoye.JokeTelling;
 
 import javax.inject.Named;
 
@@ -27,6 +29,13 @@ public class MyEndpoint {
         response.setData("Hi, " + name);
 
         return response;
+    }
+
+    @ApiMethod(name = "getJoke")
+    public Joke getJoke() {
+        JokeTelling jokeTelling = new JokeTelling();
+        jokeTelling.getRandomJoke();
+        return jokeTelling.getRandomJoke();
     }
 
 }

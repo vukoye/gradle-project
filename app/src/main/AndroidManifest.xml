@@ -12,6 +12,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
+        android:name="android.support.multidex.MultiDexApplication"
         tools:ignore="GoogleAppIndexingWarning">
 
         <!-- This meta-data tag is required to use Google Play Services. -->

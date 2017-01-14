@@ -58,26 +58,26 @@ public class MainActivity extends AppCompatActivity {
     public void tellJoke(View view) {
         JokeTelling jokeTelling = new JokeTelling();
 
-        Toast.makeText(this, jokeTelling.getJoke(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, jokeTelling.getRandomJoke().getText(), Toast.LENGTH_SHORT).show();
     }
 
     public void tellJokeNewActivity(View view) {
         JokeTelling jokeTelling = new JokeTelling();
-        startJokeActivity(jokeTelling.getJoke());
+        startJokeActivity(jokeTelling.getRandomJoke().getText());
     }
 
-    private void tellJokeFromBackend(View view) {
-        new JokesBackEndAsyncTask().execute(new Pair<Context, String>(this, "TestName"));
+    public void tellJokeFromBackend(View view) {
+        new JokesBackEndAsyncTask().execute(this);
     }
 
-    class JokesBackEndAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
+    class JokesBackEndAsyncTask extends AsyncTask<Context, Void, String> {
         MyApi mApiService = null;
         Context mContext;
         @Override
-        protected String doInBackground(final Pair<Context, String>... params) {
+        protected String doInBackground(final Context... params) {
             if (mApiService == null) {
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                        .setRootUrl("http://10.0.2.2:8080/_ah/api")
+                        .setRootUrl("https://gradle-test-project.appspot.com/_ah/api/")
                         .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                             @Override
                             public void initialize(final AbstractGoogleClientRequest<?> request) throws IOException {
@@ -87,10 +87,9 @@ public class MainActivity extends AppCompatActivity {
 
                 mApiService = builder.build();
             }
-            mContext = params[0].first;
-            String name = params[0].second;
+            mContext = params[0];
             try {
-                return mApiService.sayHi(name).execute().getData();
+                return mApiService.getJoke().execute().getText();
             } catch (IOException e) {
                 return e.getMessage();
             }

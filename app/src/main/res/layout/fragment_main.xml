@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tell_joke_new_activity"
-        android:onClick="tellJokeNewActivity"
+        android:onClick="tellJokeFromBackend"
         android:text="@string/button_backend_text"
 
         />
